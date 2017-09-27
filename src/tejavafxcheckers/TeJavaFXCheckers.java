@@ -223,6 +223,8 @@ public class TeJavaFXCheckers extends Application {
                     "RED WON!!!";
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION, info +
                     "\nPlay again?", ButtonType.YES, ButtonType.NO);
+            alert.setTitle("Do you want continue?");
+            alert.setHeaderText("Do you want continue?");
             alert.showAndWait();
             if (alert.getResult() == ButtonType.YES) {
                 prepareNewGame();
@@ -239,6 +241,7 @@ public class TeJavaFXCheckers extends Application {
     }
     
     private boolean checkKingJumps(List<Point2D> range){
+        System.out.println("range.size() = " + range.size());
         for(int i = 0; i < range.size(); ++i){
             int curX = (int)range.get(i).getX();
             int curY = (int)range.get(i).getY();
@@ -247,9 +250,10 @@ public class TeJavaFXCheckers extends Application {
                 PieceType typeCurr = board[curY][curX].getPiece().getType();
                 int nextX = (int)range.get(i + 1).getX();
                 int nextY = (int)range.get(i + 1).getY();
-                boolean isNextTileFree = !board[curY][curX].hasPiece();
-                return isWhiteTurn ? (typeCurr != PieceType.WHITE) :
-                        (typeCurr != PieceType.RED);
+                boolean isNextTileFree = !board[nextY][nextX].hasPiece();
+                return isWhiteTurn ?
+                       (typeCurr != PieceType.WHITE && isNextTileFree) :
+                       (typeCurr != PieceType.RED && isNextTileFree);
             }
         }
         return false;
@@ -316,6 +320,10 @@ public class TeJavaFXCheckers extends Application {
                     bottomRight.add(p4);
                 }                
             }
+            /*System.out.println("checkKingJumps(topLeft) = " + checkKingJumps(topLeft));
+            System.out.println("checkKingJumps(topRight) = " + checkKingJumps(topRight));
+            System.out.println("checkKingJumps(bottomLeft) = " + checkKingJumps(bottomLeft));
+            System.out.println("checkKingJumps(bottomRight) = " + checkKingJumps(bottomRight));*/
             return checkKingJumps(topLeft) || checkKingJumps(topRight) ||
                    checkKingJumps(bottomLeft) || checkKingJumps(bottomRight);
         }
@@ -394,7 +402,6 @@ public class TeJavaFXCheckers extends Application {
                     return new MoveResult(MoveType.JUMP, enemyPiece);                    
                 }
                 else {
-                    //return new MoveResult(MoveType.NORMAL);
                     if(hasSideJumps(isWhiteTurn ? whitePieces : redPieces)) {
                         System.out.println("Jump is mandatory!");
                         return new MoveResult(MoveType.NONE);

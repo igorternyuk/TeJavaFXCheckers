@@ -11,7 +11,7 @@ package tejavafxcheckers;
  */
 public class MoveResult {
     private MoveType type;
-    private Piece piece;
+    private Piece killedPiece;
 
     public MoveResult(MoveType type){
         this(type, null);
@@ -19,11 +19,11 @@ public class MoveResult {
     
     public MoveResult(MoveType type, Piece piece){
         this.type = type;
-        this.piece = piece;
+        this.killedPiece = piece;
     }    
 
     public Piece getPiece() {
-        return piece;
+        return killedPiece;
     }
 
     public MoveType getType() {
